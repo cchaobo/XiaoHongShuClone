@@ -27,7 +27,7 @@ export interface User {
   }
   
   export interface Notification {
-    id: number;
+    id: number| string;
     type: 'like' | 'comment' | 'reply';
     user: User;
     article: Article;
@@ -35,6 +35,7 @@ export interface User {
     commentId?: number;
     commentContent?: string;
     isLiked?: boolean;
+    users?: User[];//new field for grouped like
   }
 
   export type RootStackParamList = {

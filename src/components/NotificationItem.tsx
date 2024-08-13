@@ -39,10 +39,18 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onPre
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image source={getImageSource(notification.user.avatar)} style={styles.avatar} />
+      <Image 
+        source={getImageSource(notification.users ? notification.users[0].avatar : notification.user.avatar)} 
+        style={styles.avatar} 
+      />
       <View style={styles.content}>
         <Text style={styles.text}>
-          <Text style={styles.username}>{notification.user?.name || 'Unknown User'}</Text>
+        <Text style={styles.username}>
+          {notification.users 
+            ? notification.users.slice(0, 3).map(user => user.name).join(', ') + 
+              (notification.users.length > 3 ? ` and ${notification.users.length - 3} others` : '')
+            : notification.user?.name || 'Unknown User'}
+        </Text>
           {' '}{getNotificationText()}
         </Text>
         {notification.commentContent && (

@@ -119,4 +119,18 @@ export const mockNotifications: Notification[] = [
     commentContent: 'This is a fascinating topic. I\'d love to see more articles like this!',
     isLiked: false,
   },
+  {
+    id: 5,
+    type: 'like',
+    user: mockUsers[2],
+    article: mockArticles[0],
+    createdAt: '2024-08-01T13:00:00Z',
+  },
+  {
+    id: 6,
+    type: 'like',
+    user: mockUsers[3],
+    article: mockArticles[0],
+    createdAt: '2024-08-01T13:00:00Z',
+  },
 ];

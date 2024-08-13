@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -23,10 +23,39 @@ const NotificationScreen = () => {
     }
   };
 
+  //make into grouped like and other notification
+  const groupedNotifications = useMemo(() => {
+    const likeNotifications: { [key: string]: Notification[] } = {};
+    const otherNotifications: Notification[] = [];
+
+    mockNotifications.forEach(notification => {
+      if (notification.type === 'like') {
+        const articleId = notification.article.id.toString();
+        if (!likeNotifications[articleId]) {
+          likeNotifications[articleId] = [];
+        }
+        likeNotifications[articleId].push(notification);
+      } else {
+        otherNotifications.push(notification);
+      }
+    });
+
+    const groupedLikeNotifications = Object.values(likeNotifications).map(group => {
+      const latestNotification = group[group.length - 1];
+      return {
+        ...latestNotification,
+        id: `likegroup-${latestNotification.article.id}`,
+        users: group.map(n => n.user).sort((a, b) => b.id - a.id),
+      };
+    });
+
+    return [...groupedLikeNotifications, ...otherNotifications];
+  }, [mockNotifications]);
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={mockNotifications}
+        data={groupedNotifications}
         renderItem={({ item }) => (
           <NotificationItem
             notification={item}
